@@ -32,5 +32,5 @@ if(command === 'add'){
     var message = noteRemoved ? 'Note was removed' : 'Note not found';
     console.log(message);
 } else {
-    console.log('Command not found!!');
+    console.log('Command not found');
 }
