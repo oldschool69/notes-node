@@ -1,15 +1,39 @@
-console.log('starting app');
-
-
 const fs = require('fs');
 const _ = require('lodash');
 const yargs = require('yargs');
 
 const notes = require('./notes.js');
 
-const argv = yargs.argv;
+const titleCommand = {
+    describe: 'Title of note', 
+    demand: true,
+    alias: 't'
+};
+
+const bodyCommand = {
+    describe: 'Body of note',
+    demand: true,
+    alias: 'b'
+};
+
+const argv = yargs
+    .command('add', 'Add a new note', {
+        title: titleCommand,
+        body: bodyCommand
+    })
+    .command('list', 'List all notes')
+    .command('read', 'Read a note', {
+        title: titleCommand
+    })
+    .command('remove', 'Remove a note', {
+        title: titleCommand
+    })
+    .help()
+    .argv;
+
 //Pegando parametros da linha de comando
-var command = process.argv[2];
+var command = argv._[0];
+
 console.log('Command: ', command);
 console.log('Yargs', argv);
 
@@ -22,7 +46,9 @@ if(command === 'add'){
         console.log("Note already exists on database");
     }
 } else if(command === 'list'){
-    notes.getAll();    
+    var allNotes = notes.getAll();    
+    console.log(`Printing ${allNotes.length} notes(s)`);
+    allNotes.forEach((note) => notes.logNote(note));
 } else if(command === 'read'){
     var note = notes.getNote(argv.title);
     if(note){
